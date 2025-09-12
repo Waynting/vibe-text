@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
   trailingSlash: true,
   images: {
     unoptimized: true
@@ -13,11 +12,9 @@ const nextConfig = {
     
     return config;
   },
-  // Disable server-side features for Tauri
   poweredByHeader: false,
   reactStrictMode: true,
-  swcMinify: true,
-  distDir: 'dist'
+  swcMinify: true
 };
 
 export default nextConfig;

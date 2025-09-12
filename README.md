@@ -25,8 +25,8 @@
 
 <div align="center">
 
-[![Download for macOS](https://img.shields.io/badge/🍎_macOS-下載_DMG-blue?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_1.0.0_universal.dmg)
-[![Download for Windows](https://img.shields.io/badge/🪟_Windows-下載_EXE-green?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_1.0.0_x64-setup.exe)
+[![Download for macOS](https://img.shields.io/badge/🍎_macOS-下載_DMG-blue?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest)
+[![Download for Windows](https://img.shields.io/badge/🪟_Windows-下載_EXE-green?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest)
 
 </div>
 
