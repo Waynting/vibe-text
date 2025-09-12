@@ -1,0 +1,688 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme variables */
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+  --text-placeholder: #999999;
+  --border-color: #e0e0e0;
+  --border-dark: #333333;
+  --button-hover: #f8f8f8;
+  --scrollbar: #e0e0e0;
+  --scrollbar-hover: #cccccc;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+  --bg-primary: #000000;
+  --bg-secondary: #000000;
+  --text-primary: #ffffff;
+  --text-secondary: #999999;
+  --text-placeholder: #666666;
+  --border-color: #333333;
+  --border-dark: #cccccc;
+  --button-hover: #1a1a1a;
+  --scrollbar: #333333;
+  --scrollbar-hover: #555555;
+}
+
+/* Ultra-minimalist CSS for vertical Chinese text editor */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Songti SC', 'SimSun', 'Noto Serif CJK SC', serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Main container - full viewport */
+.app-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  background: var(--bg-primary);
+}
+
+/* Editor area - takes most of the screen */
+.editor-area {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 0;
+  margin-right: 200px; /* Space for toolbar */
+  overflow: hidden;
+}
+
+/* Editor container with title and content */
+.editor-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row-reverse; /* Title on the right for RTL */
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* 文字方向為 LTR 時，標題在左側 */
+.editor-container.direction-ltr {
+  flex-direction: row; /* Title on the left */
+}
+
+/* Title area - Chinese composition style */
+.title-area {
+  flex-shrink: 0;
+  width: auto;
+  height: 100%;
+  padding: 15px 15px 40px 15px; /* 與編輯器一致的頂部間距 */
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.title-text {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: 'Songti SC', 'SimSun', 'Noto Serif CJK SC', serif;
+  font-size: 27px; /* 24px + 3px */
+  font-weight: normal;
+  line-height: 1.8;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+  /* Fix Chinese punctuation positioning in vertical text */
+  text-combine-upright: none;
+  font-feature-settings: 'vpal' 1, 'vkrn' 1, 'vchw' 1;
+}
+
+.document-id {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: 'Songti SC', 'SimSun', 'Noto Serif CJK SC', serif;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  margin-left: 20px; /* Space between title and ID */
+  /* Fix Chinese punctuation positioning in vertical text */
+  text-combine-upright: none;
+  font-feature-settings: 'vpal' 1, 'vkrn' 1, 'vchw' 1;
+}
+
+/* Vertical divider line */
+.title-divider {
+  flex-shrink: 0;
+  width: 1px;
+  height: calc(100% - 30px);
+  background: var(--border-dark);
+  margin: 15px 0;
+  align-self: stretch;
+}
+
+/* Content area */
+.content-area {
+  flex: 1;
+  padding: 0; /* 移除padding，讓編輯器自己控制間距 */
+  position: relative; /* 為佔位符提供定位上下文 */
+  display: flex;
+  align-items: flex-start; /* 確保內容從頂部開始 */
+  height: 100vh; /* 使用完整視窗高度 */
+}
+
+/* Vertical text editor */
+.editor-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: 'Songti SC', 'SimSun', 'Noto Serif CJK SC', serif;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+  outline: none;
+  border: none;
+  background: transparent;
+  font-size: 18px; /* 適中的字體大小 */
+  color: var(--text-primary);
+  width: 100%;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow-x: auto;
+  overflow-y: hidden;
+  /* 確保文字從正確位置開始 */
+  display: block;
+  margin: 0;
+  padding: 15px 25px 8px 15px; /* 下方padding縮小到8px */
+  /* 垂直對齊到頂部 */
+  align-items: flex-start;
+  justify-content: flex-start;
+  /* Fix Chinese punctuation positioning in vertical text */
+  text-combine-upright: none;
+  font-feature-settings: 'vpal' 1, 'vkrn' 1, 'vchw' 1;
+}
+
+/* 文字方向變體 */
+.editor-vertical.direction-rtl {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  direction: ltr; /* 垂直文字在 RTL 模式下應該使用 ltr，讓文字從上往下排列 */
+}
+
+.editor-vertical.direction-ltr {
+  writing-mode: vertical-lr;
+  text-orientation: upright;
+  direction: ltr;
+}
+
+
+
+
+/* Ultra-minimal toolbar - right side */
+.toolbar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 200px;
+  height: 100vh;
+  background: var(--bg-primary);
+  border-left: 1px solid var(--border-color);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 17px; /* 14px + 3px */
+  z-index: 10;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Input fields */
+.input-field {
+  width: 100%;
+  padding: 8px 0;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  background: transparent;
+  font-family: 'Songti SC', serif;
+  font-size: 17px; /* 14px + 3px */
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  border-bottom-color: var(--text-primary);
+}
+
+.input-field::placeholder {
+  color: var(--text-placeholder);
+}
+
+/* Labels */
+.label {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+  font-weight: normal;
+}
+
+/* Buttons - ultra minimal */
+.btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  font-family: 'Songti SC', serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--text-primary);
+}
+
+.btn:hover {
+  border-color: var(--text-primary);
+  background: var(--button-hover);
+}
+
+.btn-primary {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+.btn-primary:hover {
+  background: var(--border-dark);
+}
+
+/* Word count display */
+.word-count {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+  padding: 8px 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* Button group */
+.btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.btn-group-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+
+/* Section dividers */
+.section {
+  padding: 8px 0;
+  flex-shrink: 0;
+}
+
+.section:not(:last-child) {
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+.section-title {
+  font-size: 12px;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+  font-weight: normal;
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  width: 100%;
+  justify-content: center;
+}
+
+/* File path display */
+.file-path {
+  font-size: 11px;
+  color: var(--text-secondary);
+  padding: 4px 0;
+  word-break: break-all;
+  line-height: 1.3;
+  background: rgba(0, 0, 0, 0.05);
+  padding: 6px 8px;
+  border-radius: 2px;
+  font-family: monospace;
+}
+
+[data-theme="dark"] .file-path {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Scrollbar - minimal horizontal */
+.editor-container::-webkit-scrollbar {
+  height: 4px;
+}
+
+.editor-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.editor-container::-webkit-scrollbar-thumb {
+  background: var(--scrollbar);
+  border-radius: 2px;
+}
+
+.editor-container::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-hover);
+}
+
+/* Responsive Design */
+
+/* Large screens (>1400px) */
+@media (min-width: 1400px) {
+  .toolbar {
+    width: 280px;
+  }
+  
+  .editor-area {
+    margin-right: 280px;
+  }
+  
+  .editor-vertical {
+    font-size: 23px; /* 20px + 3px */
+    line-height: 1.7;
+  }
+  
+  .title-text {
+    font-size: 31px; /* 28px + 3px */
+  }
+  
+  .content-area {
+    padding: 30px 20px 60px 20px;
+  }
+  
+  .title-area {
+    padding: 30px 20px 60px 20px;
+  }
+}
+
+/* Medium-Large screens (1200px - 1400px) */
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .toolbar {
+    width: 240px;
+  }
+  
+  .editor-area {
+    margin-right: 240px;
+  }
+  
+  .editor-vertical {
+    font-size: 21px; /* 18px + 3px */
+    line-height: 1.6;
+  }
+  
+  .title-text {
+    font-size: 27px; /* 24px + 3px */
+  }
+}
+
+/* Medium screens (900px - 1199px) */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .toolbar {
+    width: 200px;
+  }
+  
+  .editor-area {
+    margin-right: 200px;
+  }
+  
+  .editor-vertical {
+    font-size: 19px; /* 16px + 3px */
+    line-height: 1.5;
+  }
+  
+  .title-text {
+    font-size: 25px; /* 22px + 3px */
+  }
+  
+  .content-area {
+    padding: 15px 10px 30px 10px;
+  }
+  
+  .title-area {
+    padding: 15px 10px 30px 10px;
+  }
+}
+
+/* Small-Medium screens (600px - 899px) */
+@media (min-width: 600px) and (max-width: 899px) {
+  .toolbar {
+    width: 180px;
+    padding: 10px;
+    gap: 8px;
+  }
+  
+  .editor-area {
+    margin-right: 180px;
+  }
+  
+  .section {
+    padding: 6px 0;
+  }
+  
+  .section:not(:last-child) {
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+  }
+  
+  .editor-vertical {
+    font-size: 18px; /* 15px + 3px */
+    line-height: 1.4;
+  }
+  
+  .title-text {
+    font-size: 23px; /* 20px + 3px */
+  }
+  
+  .content-area {
+    padding: 10px 8px 20px 8px;
+  }
+  
+  .title-area {
+    padding: 10px 8px 20px 8px;
+  }
+  
+  .title-divider {
+    height: calc(100% - 20px);
+    margin: 10px 0;
+  }
+}
+
+/* Small screens (400px - 599px) */
+@media (min-width: 400px) and (max-width: 599px) {
+  .toolbar {
+    width: 160px;
+    padding: 8px;
+    font-size: 15px; /* 12px + 3px */
+    gap: 6px;
+  }
+  
+  .editor-area {
+    margin-right: 160px;
+  }
+  
+  .section {
+    padding: 4px 0;
+  }
+  
+  .section:not(:last-child) {
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+  }
+  
+  .editor-vertical {
+    font-size: 17px; /* 14px + 3px */
+    line-height: 1.3;
+  }
+  
+  .title-text {
+    font-size: 21px; /* 18px + 3px */
+    line-height: 1.6;
+  }
+  
+  .content-area {
+    padding: 8px 6px 15px 6px;
+  }
+  
+  .title-area {
+    padding: 8px 6px 15px 6px;
+  }
+  
+  .input-field {
+    font-size: 15px; /* 12px + 3px */
+    padding: 6px 0;
+  }
+  
+  .btn {
+    padding: 6px 10px;
+    font-size: 14px; /* 11px + 3px */
+  }
+  
+  .label {
+    font-size: 14px; /* 11px + 3px */
+  }
+}
+
+/* Extra small screens (<400px) */
+@media (max-width: 399px) {
+  .toolbar {
+    width: 140px;
+    padding: 6px;
+    font-size: 14px; /* 11px + 3px */
+    gap: 4px;
+  }
+  
+  .editor-area {
+    margin-right: 140px;
+  }
+  
+  .section {
+    padding: 3px 0;
+  }
+  
+  .section:not(:last-child) {
+    margin-bottom: 3px;
+    padding-bottom: 3px;
+  }
+  
+  .editor-vertical {
+    font-size: 16px; /* 13px + 3px */
+    line-height: 1.2;
+  }
+  
+  .title-text {
+    font-size: 19px; /* 16px + 3px */
+    line-height: 1.5;
+  }
+  
+  .content-area {
+    padding: 5px 4px 10px 4px;
+  }
+  
+  .title-area {
+    padding: 5px 4px 10px 4px;
+  }
+  
+  .input-field {
+    font-size: 14px; /* 11px + 3px */
+    padding: 4px 0;
+  }
+  
+  .btn {
+    padding: 5px 8px;
+    font-size: 13px; /* 10px + 3px */
+  }
+  
+  .btn-group-row {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  
+  .label {
+    font-size: 13px; /* 10px + 3px */
+  }
+  
+  .word-count {
+    font-size: 13px; /* 10px + 3px */
+  }
+}
+
+/* Height-constrained screens (height < 600px) */
+@media (max-height: 599px) {
+  .toolbar {
+    padding: 8px;
+    gap: 6px;
+  }
+  
+  .section {
+    padding: 4px 0;
+  }
+  
+  .section:not(:last-child) {
+    margin-bottom: 4px;
+    padding-bottom: 4px;
+  }
+  
+  .input-field {
+    padding: 4px 0;
+  }
+  
+  .btn {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+/* Very height-constrained screens (height < 400px) */
+@media (max-height: 399px) {
+  .toolbar {
+    padding: 4px;
+    gap: 3px;
+  }
+  
+  .section {
+    padding: 2px 0;
+  }
+  
+  .section:not(:last-child) {
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+  }
+  
+  .input-field {
+    padding: 2px 0;
+    font-size: 13px;
+  }
+  
+  .btn {
+    padding: 3px 6px;
+    font-size: 11px;
+  }
+  
+  .label {
+    font-size: 11px;
+  }
+  
+  .word-count {
+    font-size: 11px;
+    padding: 4px 0;
+  }
+}
+
+/* Remove all decorative elements */
+.paper,
+.postmark,
+.sidebar-right {
+  display: none;
+}
+
+/* Focus states */
+.editor-vertical:focus {
+  background: var(--bg-primary);
+  opacity: 0.98;
+}
+
+/* Typography fine-tuning */
+.editor-vertical {
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  text-rendering: optimizeLegibility;
+}
+
+/* Selection styling - 修復異常反白 */
+.editor-vertical::selection {
+  background: rgba(0, 0, 0, 0.1);
+  color: inherit;
+}
+
+.editor-vertical::-moz-selection {
+  background: rgba(0, 0, 0, 0.1);
+  color: inherit;
+}
+
+[data-theme="dark"] .editor-vertical::selection {
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+
+[data-theme="dark"] .editor-vertical::-moz-selection {
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+

@@ -1,0 +1,20 @@
+[package]
+name = "vibe-text"
+version = "0.1.0"
+description = "A vertical Chinese envelope text editor"
+authors = ["you"]
+license = ""
+repository = ""
+default-run = "vibe-text"
+edition = "2021"
+rust-version = "1.60"
+
+[build-dependencies]
+tauri-build = { version = "1.5", features = [] }
+
+[dependencies]
+tauri = { version = "1.5", features = [ "dialog-open", "dialog-save", "fs-write-file", "fs-read-file"] }
+
+[features]
+default = [ "custom-protocol" ]
+custom-protocol = [ "tauri/custom-protocol" ]
