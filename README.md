@@ -2,8 +2,6 @@
 
 一個優雅的直式中文文字編輯器，支援傳統由右至左的書寫方式。
 
-![Vibe Text Screenshot](https://via.placeholder.com/800x500/f0f0f0/333333?text=Vibe+Text+Screenshot)
-
 ## ✨ 功能特色
 
 - 📝 **直式文字編輯** - 支援傳統中文由右至左、由上至下的書寫方式
@@ -27,13 +25,13 @@
 
 <div align="center">
 
-[![Download for macOS](https://img.shields.io/badge/🍎_macOS-下載_DMG-blue?style=for-the-badge&logoColor=white)](https://github.com/Waynting/vibe-text/releases/latest/download/Vibe.Text_universal.dmg)
-[![Download for Windows](https://img.shields.io/badge/🪟_Windows-下載_MSI-green?style=for-the-badge&logoColor=white)](https://github.com/Waynting/vibe-text/releases/latest/download/Vibe.Text_x64_en-US.msi)
-[![Download for Linux](https://img.shields.io/badge/🐧_Linux-下載_AppImage-orange?style=for-the-badge&logoColor=white)](https://github.com/Waynting/vibe-text/releases/latest/download/vibe-text_amd64.AppImage)
+[![Download for macOS](https://img.shields.io/badge/🍎_macOS-下載_DMG-blue?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_universal.dmg)
+[![Download for Windows](https://img.shields.io/badge/🪟_Windows-下載_MSI-green?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_x64_en-US.msi)
+[![Download for Linux](https://img.shields.io/badge/🐧_Linux-下載_AppImage-orange?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/vibe-text_amd64.AppImage)
 
 </div>
 
-或從 [GitHub Releases](https://github.com/Waynting/vibe-text/releases) 檢視所有版本。
+或從 [GitHub Releases](https://github.com/waynting/vibe-text/releases) 檢視所有版本。
 
 | 平台 | 檔案類型 | 說明 |
 |------|----------|------|
@@ -82,7 +80,7 @@
 ### 本地開發
 ```bash
 # 克隆專案
-git clone https://github.com/Waynting/vibe-text.git
+git clone https://github.com/waynting/vibe-text.git
 cd vibe-text
 
 # 安裝依賴
