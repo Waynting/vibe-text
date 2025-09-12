@@ -46,6 +46,7 @@ export default function VibeTextApp() {
   const [viewSettings, setViewSettings] = useState<ViewSettings>({
     direction: 'rtl', // 預設為傳統中文從右到左
   })
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const wordCount = useWordCount(document.content)
 
   // Load theme from localStorage on mount
@@ -241,6 +242,18 @@ export default function VibeTextApp() {
         viewSettings={viewSettings}
       />
       
+
+      {/* Mobile toolbar open button - show when collapsed */}
+      {!isMobileMenuOpen && (
+        <button
+          className="mobile-open-button md:hidden"
+          onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="開啟選單"
+        >
+          ≡
+        </button>
+      )}
+      
       {/* Minimal toolbar */}
       <Sidebar
         meta={document.meta}
@@ -257,6 +270,8 @@ export default function VibeTextApp() {
         onToggleTheme={toggleTheme}
         viewSettings={viewSettings}
         onViewSettingsChange={setViewSettings}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onCloseMobileMenu={() => setIsMobileMenuOpen(false)}
       />
     </div>
   )

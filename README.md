@@ -15,7 +15,7 @@
 ## 📥 下載
 
 ### 🌐 網頁版（推薦）
-**[🚀 立即使用 - vibe-text.vercel.app](https://vibe-text-ten.vercel.app/)**
+**[🚀 立即使用 - vibe-text-ntu.vercel.app](https://vibe-text-ntu.vercel.app)**
 
 無需安裝，直接在瀏覽器中使用！
 
@@ -42,7 +42,7 @@
 ## 🚀 快速開始
 
 ### 網頁版
-1. 訪問 [[vibe-text-ten.vercel.app](https://vibe-text-ten.vercel.app/)]
+1. 訪問 [vibe-text-ntu.vercel.app](https://vibe-text-ntu.vercel.app)
 2. 開始書寫！
 
 ### 桌面版

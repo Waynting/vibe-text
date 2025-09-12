@@ -17,6 +17,8 @@ interface ToolbarProps {
   onToggleTheme: () => void
   viewSettings: ViewSettings
   onViewSettingsChange: (settings: ViewSettings) => void
+  isMobileMenuOpen?: boolean
+  onCloseMobileMenu?: () => void
 }
 
 export function Sidebar({ 
@@ -33,7 +35,9 @@ export function Sidebar({
   theme, 
   onToggleTheme, 
   viewSettings, 
-  onViewSettingsChange 
+  onViewSettingsChange,
+  isMobileMenuOpen,
+  onCloseMobileMenu
 }: ToolbarProps) {
 
   const handleDirectionToggle = () => {
@@ -44,17 +48,44 @@ export function Sidebar({
     })
   }
 
+  const handleMobileAction = (action: () => void) => {
+    action()
+    if (onCloseMobileMenu) {
+      onCloseMobileMenu()
+    }
+  }
+
+  const getToolbarClasses = () => {
+    let classes = 'toolbar'
+    
+    // Mobile states
+    if (isMobileMenuOpen) {
+      classes += ' open'
+    }
+    
+    return classes
+  }
+
   return (
-    <div className="toolbar">
+    <div className={getToolbarClasses()}>
+      {/* Mobile close button - at top on mobile */}
+      <button
+        className="mobile-close-button md:hidden"
+        onClick={() => onCloseMobileMenu && onCloseMobileMenu()}
+        aria-label="收合選單"
+      >
+        收起選單
+      </button>
+      
       {/* File operations */}
       <div className="section">
         <div className="btn-group-row">
-          <button onClick={onNew} className="btn">新建</button>
-          <button onClick={onOpen} className="btn">開啟</button>
+          <button onClick={() => handleMobileAction(onNew)} className="btn">新建</button>
+          <button onClick={() => handleMobileAction(onOpen)} className="btn">開啟</button>
         </div>
         <div className="btn-group-row" style={{marginTop: '4px'}}>
-          <button onClick={onSave} className="btn">儲存</button>
-          <button onClick={onSaveAs} className="btn">另存</button>
+          <button onClick={() => handleMobileAction(onSave)} className="btn">儲存</button>
+          <button onClick={() => handleMobileAction(onSaveAs)} className="btn">另存</button>
         </div>
       </div>
 
@@ -121,7 +152,7 @@ export function Sidebar({
       {/* Text Direction Toggle */}
       <div className="section">
         <div className="section-title">文字方向</div>
-        <button onClick={handleDirectionToggle} className="btn theme-toggle">
+        <button onClick={() => handleMobileAction(handleDirectionToggle)} className="btn theme-toggle">
           {viewSettings.direction === 'rtl' ? '右起' : '左起'}
         </button>
       </div>
@@ -129,7 +160,7 @@ export function Sidebar({
       {/* Theme toggle */}
       <div className="section">
         <div className="section-title">主題</div>
-        <button onClick={onToggleTheme} className="btn theme-toggle">
+        <button onClick={() => handleMobileAction(onToggleTheme)} className="btn theme-toggle">
           {theme === 'light' ? '深色' : '淺色'}
         </button>
       </div>

@@ -128,6 +128,7 @@ body {
   .toolbar {
     @apply fixed top-0 right-0 w-[200px] h-screen bg-[var(--bg-primary)] border-l border-[var(--border-color)] p-[15px] flex flex-col gap-3 text-[17px] z-10 overflow-y-auto overflow-x-hidden;
   }
+  
 
   /* Input fields */
   .input-field {
@@ -273,4 +274,115 @@ body {
 [data-theme="dark"] .editor-vertical::-moz-selection {
   background: rgba(255, 255, 255, 0.1);
   color: inherit;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+  /* Hide sidebar edge toggle on mobile */
+  .sidebar-toggle {
+    @apply hidden !important;
+  }
+  
+  /* Mobile toolbar - bottom slide-up */
+  .toolbar {
+    @apply w-full h-auto max-h-[50vh] border-l-0 border-t border-[var(--border-color)] bottom-0 top-auto left-0 right-0;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .toolbar.open {
+    transform: translateY(0);
+  }
+  
+  .toolbar.collapsed {
+    transform: translateY(100%);
+  }
+  
+  /* Mobile toolbar close button - inside toolbar at top */
+  .mobile-close-button {
+    @apply w-full h-14 bg-transparent border-0 border-b border-[var(--border-color)] flex items-center justify-center text-lg cursor-pointer mb-6;
+    color: var(--text-secondary);
+    padding-bottom: 8px;
+  }
+  
+  .mobile-close-button:hover {
+    @apply bg-[var(--button-hover)];
+  }
+  
+  /* Mobile toolbar open button - fixed bottom right when collapsed */
+  .mobile-open-button {
+    @apply fixed bottom-4 right-2 w-12 h-8 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg flex items-center justify-center text-lg z-20 cursor-pointer;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mobile editor - full width */
+  .editor-vertical {
+    @apply text-[16px] leading-[1.5];
+    padding: 20px;
+    width: 100vw;
+  }
+  
+  /* Mobile editor area - full width */
+  .editor-area {
+    @apply mr-0 !important;
+  }
+  
+  /* Mobile buttons - larger touch targets */
+  .btn {
+    @apply min-h-[44px] text-[16px] px-4;
+  }
+  
+  /* Mobile input fields */
+  .input-field {
+    @apply text-[16px] py-3;
+  }
+  
+  /* Mobile app container */
+  .app-container {
+    @apply pb-16;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small mobile adjustments */
+  .editor-vertical {
+    @apply text-[15px] pr-12;
+    padding: 15px 50px 15px 15px;
+  }
+  
+  .toolbar-toggle {
+    @apply w-10 h-10 top-3 right-3 text-lg;
+  }
+  
+  .toolbar {
+    @apply p-3 gap-2;
+  }
+  
+  .input-field {
+    @apply text-[15px];
+  }
+  
+  .btn {
+    @apply text-[15px] min-h-[42px];
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover {
+    @apply bg-transparent;
+  }
+  
+  .btn:active {
+    @apply bg-[var(--button-hover)];
+  }
+  
+  /* Larger scrollbars for touch */
+  .editor-vertical::-webkit-scrollbar {
+    @apply w-3;
+  }
+  
+  .toolbar::-webkit-scrollbar {
+    @apply w-2;
+  }
 }
