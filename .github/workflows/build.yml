@@ -16,8 +16,6 @@ jobs:
         include:
           - platform: 'macos-latest'
             args: '--target universal-apple-darwin'
-          - platform: 'ubuntu-22.04'
-            args: ''
           - platform: 'windows-latest'
             args: ''
 
@@ -27,11 +25,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-22.04'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
@@ -70,7 +63,6 @@ jobs:
             
             - 🍎 **macOS**: 下載 `.dmg` 檔案（支援 Intel 和 Apple Silicon）
             - 🪟 **Windows**: 下載 `.msi` 檔案  
-            - 🐧 **Linux**: 下載 `.AppImage` 檔案
             
             ### 🌐 網頁版
             

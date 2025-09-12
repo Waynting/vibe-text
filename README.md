@@ -25,9 +25,8 @@
 
 <div align="center">
 
-[![Download for macOS](https://img.shields.io/badge/🍎_macOS-下載_DMG-blue?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_universal.dmg)
-[![Download for Windows](https://img.shields.io/badge/🪟_Windows-下載_MSI-green?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_x64_en-US.msi)
-[![Download for Linux](https://img.shields.io/badge/🐧_Linux-下載_AppImage-orange?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/vibe-text_amd64.AppImage)
+[![Download for macOS](https://img.shields.io/badge/🍎_macOS-下載_DMG-blue?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_1.0.0_universal.dmg)
+[![Download for Windows](https://img.shields.io/badge/🪟_Windows-下載_EXE-green?style=for-the-badge&logoColor=white)](https://github.com/waynting/vibe-text/releases/latest/download/Vibe.Text_1.0.0_x64-setup.exe)
 
 </div>
 
@@ -36,8 +35,7 @@
 | 平台 | 檔案類型 | 說明 |
 |------|----------|------|
 | 🍎 **macOS** | `.dmg` | 支援 Intel 和 Apple Silicon Mac |
-| 🪟 **Windows** | `.msi` | Windows 10/11 x64 |
-| 🐧 **Linux** | `.AppImage` | 免安裝，適用大部分 Linux 發行版 |
+| 🪟 **Windows** | `.exe` | Windows 10/11 x64 安裝程式 |
 
 > 💡 **提示**: 下載後直接安裝即可使用。macOS 用戶可能需要在「系統偏好設定 > 安全性與隱私」中允許應用程式執行。
 
