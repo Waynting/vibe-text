@@ -160,30 +160,6 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
         />
       </div>
       
-      {/* 專用截圖容器（隱藏） */}
-      <div 
-        id="screenshot-container"
-        className={`screenshot-container direction-${viewSettings.direction}`}
-        style={{ 
-          position: 'absolute', 
-          left: '-9999px',
-          width: '800px',
-          height: '600px'
-        }}
-      >
-        <div className="title-area">
-          <div className="title-text">{title || '未命名'}</div>
-        </div>
-        
-        <div className="title-divider"></div>
-        
-        <div 
-          className={`editor-vertical direction-${viewSettings.direction} content-area`}
-          style={{ whiteSpace: 'pre-wrap' }}
-        >
-          {value}
-        </div>
-      </div>
     </div>
   )
 }

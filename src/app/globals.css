@@ -184,14 +184,6 @@ body {
   }
   
   
-  /* Screenshot container */
-  .screenshot-container {
-    @apply bg-[var(--bg-primary)] flex flex-row-reverse overflow-hidden;
-  }
-  
-  .screenshot-container.direction-ltr {
-    @apply flex-row;
-  }
 
   /* Button group */
   .btn-group {

@@ -1,7 +1,6 @@
 'use client'
 
-import { DocMeta, ViewSettings, ScreenshotSettings } from '@/types'
-import { captureScreenshot } from '@/utils/screenshot'
+import { DocMeta, ViewSettings } from '@/types'
 
 interface ToolbarProps {
   meta: DocMeta
@@ -159,32 +158,6 @@ export function Sidebar({
       </div>
 
 
-      {/* Screenshot */}
-      <div className="section">
-        <div className="section-title">輸出圖片</div>
-        <button 
-          onClick={async () => {
-            const screenshotContainer = document.querySelector('#screenshot-container')
-            if (screenshotContainer) {
-              try {
-                await captureScreenshot({
-                  element: screenshotContainer as HTMLElement,
-                  format: 'jpeg',
-                  quality: 95,
-                  includeTitle: true,
-                  currentPageOnly: true,
-                  fileName: `${fileName || meta.title || '未命名'}`
-                })
-              } catch (error) {
-                alert('截圖失敗，請稍後再試')
-              }
-            }
-          }} 
-          className="btn"
-        >
-          截圖
-        </button>
-      </div>
 
       {/* Theme toggle */}
       <div className="section">

@@ -27,9 +27,3 @@ export interface ViewSettings {
 }
 
 
-export interface ScreenshotSettings {
-  format: 'png' | 'jpeg'; // 圖片格式
-  quality?: number; // JPEG 品質 (0-100)
-  includeTitle: boolean; // 是否包含標題
-  currentPageOnly: boolean; // 只截取當前頁面
-}
