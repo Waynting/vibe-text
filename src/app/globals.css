@@ -56,6 +56,7 @@ body {
   .editor-area {
     @apply flex-1 flex items-stretch justify-stretch p-0 mr-[200px] overflow-hidden;
   }
+  
 
   /* Editor container with title and content */
   .editor-container {
@@ -76,11 +77,11 @@ body {
   .title-text {
     writing-mode: vertical-rl;
     text-orientation: upright;
-    @apply font-songti text-[27px] font-normal leading-[1.8] tracking-[0.1em] text-[var(--text-primary)];
+    @apply font-songti text-[29px] font-normal leading-[1.8] tracking-[0.1em] text-[var(--text-primary)];
     /* Fix Chinese punctuation positioning in vertical text */
     text-combine-upright: none;
     font-feature-settings: 'vpal' 1, 'vkrn' 1, 'vchw' 1;
-    padding: 15px;
+    padding: 20px 15px 15px 15px; /* 上padding增加5px */
   }
 
   /* Vertical divider line */
@@ -99,7 +100,8 @@ body {
   .editor-vertical {
     writing-mode: vertical-rl;
     text-orientation: upright;
-    @apply font-songti leading-[1.6] tracking-[0.02em] outline-none border-none bg-transparent text-[18px] text-[var(--text-primary)] w-full block m-0;
+    @apply font-songti leading-[1.6] tracking-[0.02em] outline-none border-none bg-transparent text-[var(--text-primary)] w-full block m-0;
+    font-size: 18px; /* 預設字體大小 */
     height: 100vh;
     min-height: 100vh;
     max-height: 100vh;
@@ -110,6 +112,7 @@ body {
     text-combine-upright: none;
     font-feature-settings: 'vpal' 1, 'vkrn' 1, 'vchw' 1;
   }
+
 
   /* 文字方向變體 */
   .editor-vertical.direction-rtl {
@@ -179,6 +182,16 @@ body {
   .word-count {
     @apply text-xs text-[var(--text-secondary)] text-center py-2 border-t border-[var(--border-color)] mt-auto flex-shrink-0;
   }
+  
+  
+  /* Screenshot container */
+  .screenshot-container {
+    @apply bg-[var(--bg-primary)] flex flex-row-reverse overflow-hidden;
+  }
+  
+  .screenshot-container.direction-ltr {
+    @apply flex-row;
+  }
 
   /* Button group */
   .btn-group {
@@ -197,9 +210,10 @@ body {
   .section:not(:last-child) {
     @apply border-b border-[var(--border-color)] mb-2 pb-2;
   }
-
+  
+  /* Section title */
   .section-title {
-    @apply text-xs text-[var(--text-primary)] mb-2 font-normal;
+    @apply text-xs text-[var(--text-secondary)] mb-2 font-normal uppercase tracking-wider;
   }
 
   /* Theme toggle button */

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { ViewSettings } from '@/types'
 
 interface EditorProps {
@@ -45,7 +45,7 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
     handleInput()
   }
 
-  // Handle Tab key to insert two full-width spaces
+  // Handle Tab key to insert two full-width spaces and Enter for new lines
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Tab') {
       e.preventDefault()
@@ -90,10 +90,16 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
           }
         }
       }, 0)
+    } else if (e.key === 'Enter') {
+      // 確保 Enter 鍵可以正常換行
+      // 不需要 preventDefault()，讓瀏覽器處理預設行為
+      setTimeout(() => {
+        handleInput()
+      }, 0)
     }
   }
 
-  // Update editor content when value prop changes
+  // Update editor content when value changes
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerText !== value) {
       editorRef.current.innerText = value
@@ -128,6 +134,7 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
 
   return (
     <div className="editor-area">
+      {/* 編輯器容器 */}
       <div className={`editor-container direction-${viewSettings.direction}`}>
         {/* Title area */}
         <div className="title-area">
@@ -151,6 +158,31 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={handleCompositionEnd}
         />
+      </div>
+      
+      {/* 專用截圖容器（隱藏） */}
+      <div 
+        id="screenshot-container"
+        className={`screenshot-container direction-${viewSettings.direction}`}
+        style={{ 
+          position: 'absolute', 
+          left: '-9999px',
+          width: '800px',
+          height: '600px'
+        }}
+      >
+        <div className="title-area">
+          <div className="title-text">{title || '未命名'}</div>
+        </div>
+        
+        <div className="title-divider"></div>
+        
+        <div 
+          className={`editor-vertical direction-${viewSettings.direction} content-area`}
+          style={{ whiteSpace: 'pre-wrap' }}
+        >
+          {value}
+        </div>
       </div>
     </div>
   )

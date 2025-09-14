@@ -25,3 +25,11 @@ export type TextDirection = 'rtl' | 'ltr'; // Right-to-Left or Left-to-Right
 export interface ViewSettings {
   direction: TextDirection; // 文字方向
 }
+
+
+export interface ScreenshotSettings {
+  format: 'png' | 'jpeg'; // 圖片格式
+  quality?: number; // JPEG 品質 (0-100)
+  includeTitle: boolean; // 是否包含標題
+  currentPageOnly: boolean; // 只截取當前頁面
+}

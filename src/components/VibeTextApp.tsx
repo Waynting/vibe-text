@@ -102,6 +102,7 @@ export default function VibeTextApp() {
       isDirty: true,
     }))
   }, [])
+  
 
   // Handle meta data changes
   const handleMetaChange = useCallback((newMeta: Partial<DocMeta>) => {
