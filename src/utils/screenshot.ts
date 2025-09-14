@@ -1,4 +1,3 @@
-import html2canvas from 'html2canvas'
 import { ScreenshotSettings } from '@/types'
 
 export interface ScreenshotOptions extends ScreenshotSettings {
@@ -15,6 +14,9 @@ export async function captureScreenshot(options: ScreenshotOptions): Promise<voi
   } = options
 
   try {
+    // 動態導入 html2canvas，確保只在客戶端載入
+    const html2canvas = (await import('html2canvas')).default
+    
     // 判斷當前主題
     const rootElement = document.documentElement
     const currentTheme = rootElement.getAttribute('data-theme')
