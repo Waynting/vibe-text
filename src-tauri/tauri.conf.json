@@ -26,7 +26,7 @@
     },
     "bundle": {
       "active": true,
-      "targets": ["dmg", "nsis"],
+      "targets": "all",
       "identifier": "com.vibetext.app",
       "icon": ["icons/32x32.png", "icons/128x128.png", "icons/128x128@2x.png", "icons/icon.icns", "icons/icon.ico"],
       "longDescription": "一個優雅的直式中文文字編輯器，支援傳統由右至左的書寫方式。",
@@ -48,20 +48,7 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": "",
-        "nsis": {
-          "displayLanguageSelector": false,
-          "language": "SimpChinese",
-          "installerIcon": "icons/icon.ico",
-          "installMode": "perMachine",
-          "allowDowngrades": false,
-          "allowToChangeInstallationDirectory": true,
-          "createDesktopIcon": true,
-          "createStartMenuShortcut": true,
-          "license": null,
-          "headerImage": null,
-          "sidebarImage": null
-        }
+        "timestampUrl": ""
       }
     },
     "security": {
