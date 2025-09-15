@@ -11,7 +11,7 @@
   --text-primary: #000000;
   --text-secondary: #666666;
   --text-placeholder: #999999;
-  --border-color: #e0e0e0;
+  --border-color: #cccccc;
   --border-dark: #333333;
   --button-hover: #f8f8f8;
   --scrollbar: #e0e0e0;
@@ -25,11 +25,25 @@
   --text-primary: #ffffff;
   --text-secondary: #999999;
   --text-placeholder: #666666;
-  --border-color: #333333;
+  --border-color: #555555;
   --border-dark: #cccccc;
   --button-hover: #1a1a1a;
   --scrollbar: #333333;
   --scrollbar-hover: #555555;
+}
+
+/* Paper theme */
+[data-theme="paper"] {
+  --bg-primary: #e2c488;
+  --bg-secondary: #f4e8d0;
+  --text-primary: #000000;
+  --text-secondary: #4a4a4a;
+  --text-placeholder: #8b7355;
+  --border-color: #8b7355;
+  --border-dark: #000000;
+  --button-hover: #d4c4a0;
+  --scrollbar: #8b7355;
+  --scrollbar-hover: #6b5a42;
 }
 
 /* Ultra-minimalist CSS for vertical Chinese text editor */
@@ -129,13 +143,13 @@ body {
 
   /* Ultra-minimal toolbar - right side */
   .toolbar {
-    @apply fixed top-0 right-0 w-[200px] h-screen bg-[var(--bg-primary)] border-l border-[var(--border-color)] p-[15px] flex flex-col gap-3 text-[17px] z-10 overflow-y-auto overflow-x-hidden;
+    @apply fixed top-0 right-0 w-[200px] h-screen bg-[var(--bg-primary)] border-l-2 border-[var(--border-color)] p-[15px] flex flex-col gap-3 text-[17px] z-10 overflow-y-auto overflow-x-hidden;
   }
   
 
   /* Input fields */
   .input-field {
-    @apply w-full py-2 px-0 border-none border-b border-[var(--border-color)] bg-transparent font-songti text-[17px] outline-none transition-colors duration-200;
+    @apply w-full py-2 px-0 border-none border-b-2 border-[var(--border-color)] bg-transparent font-songti text-[17px] outline-none transition-colors duration-200;
   }
 
   .input-field:focus {
@@ -148,7 +162,7 @@ body {
 
   /* Description textarea */
   .description-field {
-    @apply resize-none text-[14px] leading-[1.4] py-2 px-2 border border-[var(--border-color)] rounded-[2px];
+    @apply resize-none text-[14px] leading-[1.4] py-2 px-2 border-2 border-[var(--border-color)] rounded-[2px];
     min-height: 60px;
   }
 
@@ -163,7 +177,7 @@ body {
 
   /* Buttons - ultra minimal */
   .btn {
-    @apply bg-transparent border border-[var(--border-color)] py-2 px-3 font-songti text-xs cursor-pointer transition-all duration-200 text-[var(--text-primary)];
+    @apply bg-transparent border-2 border-[var(--border-color)] py-2 px-3 font-songti text-xs cursor-pointer transition-all duration-200 text-[var(--text-primary)];
   }
 
   .btn:hover {
@@ -180,7 +194,7 @@ body {
 
   /* Word count display */
   .word-count {
-    @apply text-xs text-[var(--text-secondary)] text-center py-2 border-t border-[var(--border-color)] mt-auto flex-shrink-0;
+    @apply text-xs text-[var(--text-secondary)] text-center py-2 border-t-2 border-[var(--border-color)] mt-auto flex-shrink-0;
   }
   
   
@@ -200,7 +214,7 @@ body {
   }
 
   .section:not(:last-child) {
-    @apply border-b border-[var(--border-color)] mb-2 pb-2;
+    @apply border-b-2 border-[var(--border-color)] mb-2 pb-2;
   }
   
   /* Section title */
@@ -261,6 +275,32 @@ body {
   background: var(--bg-primary) !important;
 }
 
+/* Paper theme color inheritance */
+[data-theme="paper"] .editor-vertical,
+[data-theme="paper"] .title-text,
+[data-theme="paper"] .input-field,
+[data-theme="paper"] .description-field,
+[data-theme="paper"] .label,
+[data-theme="paper"] .section-title,
+[data-theme="paper"] .word-count {
+  color: var(--text-primary) !important;
+  background-color: transparent !important;
+}
+
+[data-theme="paper"] .btn:not(.btn-primary) {
+  color: var(--text-primary) !important;
+  background-color: transparent !important;
+}
+
+[data-theme="paper"] .app-container,
+[data-theme="paper"] .toolbar {
+  background: var(--bg-primary) !important;
+}
+
+[data-theme="paper"] .file-path {
+  @apply bg-black bg-opacity-5;
+}
+
 /* Selection styling - 修復異常反白 */
 .editor-vertical::selection {
   background: rgba(0, 0, 0, 0.1);
@@ -279,6 +319,16 @@ body {
 
 [data-theme="dark"] .editor-vertical::-moz-selection {
   background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+
+[data-theme="paper"] .editor-vertical::selection {
+  background: rgba(0, 0, 0, 0.1);
+  color: inherit;
+}
+
+[data-theme="paper"] .editor-vertical::-moz-selection {
+  background: rgba(0, 0, 0, 0.1);
   color: inherit;
 }
 

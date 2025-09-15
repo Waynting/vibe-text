@@ -13,8 +13,9 @@ interface ToolbarProps {
   onOpen: () => void
   onSave: () => void
   onSaveAs: () => void
-  theme: 'light' | 'dark'
-  onToggleTheme: () => void
+  theme: 'light' | 'dark' | 'paper'
+  onToggleLightDark: () => void
+  onSetPaperTheme: () => void
   viewSettings: ViewSettings
   onViewSettingsChange: (settings: ViewSettings) => void
   isMobileMenuOpen?: boolean
@@ -33,7 +34,8 @@ export function Sidebar({
   onSave, 
   onSaveAs, 
   theme, 
-  onToggleTheme, 
+  onToggleLightDark,
+  onSetPaperTheme,
   viewSettings, 
   onViewSettingsChange,
   isMobileMenuOpen,
@@ -162,9 +164,17 @@ export function Sidebar({
       {/* Theme toggle */}
       <div className="section">
         <div className="section-title">主題</div>
-        <button onClick={() => handleMobileAction(onToggleTheme)} className="btn theme-toggle">
-          {theme === 'light' ? '深色' : '淺色'}
-        </button>
+        <div className="btn-group-row">
+          <button onClick={() => handleMobileAction(onToggleLightDark)} className="btn theme-toggle">
+            {theme === 'dark' ? '淺色' : '深色'}
+          </button>
+          <button 
+            onClick={() => handleMobileAction(onSetPaperTheme)} 
+            className={`btn theme-toggle ${theme === 'paper' ? 'btn-primary' : ''}`}
+          >
+            牛皮紙
+          </button>
+        </div>
       </div>
 
       {/* Word count - at bottom */}

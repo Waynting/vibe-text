@@ -42,7 +42,7 @@ function createNewDocument(): DocumentState {
 
 export default function VibeTextApp() {
   const [document, setDocument] = useState<DocumentState>(createNewDocument)
-  const [theme, setTheme] = useState<'light' | 'dark'>('light')
+  const [theme, setTheme] = useState<'light' | 'dark' | 'paper'>('light')
   const [viewSettings, setViewSettings] = useState<ViewSettings>({
     direction: 'rtl', // 預設為傳統中文從右到左
   })
@@ -51,16 +51,16 @@ export default function VibeTextApp() {
 
   // Load theme from localStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark'
-    if (savedTheme) {
+    const savedTheme = localStorage.getItem('theme') as 'light' | 'dark' | 'paper'
+    if (savedTheme && ['light', 'dark', 'paper'].includes(savedTheme)) {
       setTheme(savedTheme)
       window.document.documentElement.setAttribute('data-theme', savedTheme)
     }
   }, [])
 
-  // Update theme
-  const toggleTheme = useCallback(() => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
+  // Toggle between light and dark theme
+  const toggleLightDark = useCallback(() => {
+    const newTheme = theme === 'light' ? 'dark' : theme === 'dark' ? 'light' : 'light'
     setTheme(newTheme)
     
     // Force theme update on document element
@@ -82,6 +82,31 @@ export default function VibeTextApp() {
       }
     }, 0)
   }, [theme])
+
+  // Set paper theme
+  const setPaperTheme = useCallback(() => {
+    const newTheme = 'paper'
+    setTheme(newTheme)
+    
+    // Force theme update on document element
+    const root = window.document.documentElement
+    root.setAttribute('data-theme', newTheme)
+    
+    // Force style recalculation
+    root.style.display = 'none'
+    root.offsetHeight // Force reflow
+    root.style.display = ''
+    
+    localStorage.setItem('theme', newTheme)
+    
+    // Force update all text elements
+    setTimeout(() => {
+      const editor = window.document.getElementById('editor-content')
+      if (editor) {
+        editor.style.color = getComputedStyle(root).getPropertyValue('--text-primary')
+      }
+    }, 0)
+  }, [])
 
   // Update word count in meta when it changes
   useEffect(() => {
@@ -268,7 +293,8 @@ export default function VibeTextApp() {
         onSave={handleSave}
         onSaveAs={handleSaveAs}
         theme={theme}
-        onToggleTheme={toggleTheme}
+        onToggleLightDark={toggleLightDark}
+        onSetPaperTheme={setPaperTheme}
         viewSettings={viewSettings}
         onViewSettingsChange={setViewSettings}
         isMobileMenuOpen={isMobileMenuOpen}
