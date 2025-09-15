@@ -48,20 +48,20 @@
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
-        "timestampUrl": ""
-      },
-      "nsis": {
-        "displayLanguageSelector": false,
-        "language": "SimpChinese",
-        "installerIcon": "icons/icon.ico",
-        "installMode": "perMachine",
-        "allowDowngrades": false,
-        "allowToChangeInstallationDirectory": true,
-        "createDesktopIcon": true,
-        "createStartMenuShortcut": true,
-        "license": null,
-        "headerImage": null,
-        "sidebarImage": null
+        "timestampUrl": "",
+        "nsis": {
+          "displayLanguageSelector": false,
+          "language": "SimpChinese",
+          "installerIcon": "icons/icon.ico",
+          "installMode": "perMachine",
+          "allowDowngrades": false,
+          "allowToChangeInstallationDirectory": true,
+          "createDesktopIcon": true,
+          "createStartMenuShortcut": true,
+          "license": null,
+          "headerImage": null,
+          "sidebarImage": null
+        }
       }
     },
     "security": {
