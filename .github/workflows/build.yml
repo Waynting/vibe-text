@@ -63,7 +63,7 @@ jobs:
             選擇你的作業系統：
             
             - 🍎 **macOS**: 下載 `.dmg` 檔案（支援 Intel 和 Apple Silicon）
-            - 🪟 **Windows**: 下載 `.exe` 安裝檔  
+            - 🪟 **Windows**: 下載 `.msi` 安裝檔（需要管理員權限安裝）  
             
             ### 🌐 網頁版
             
