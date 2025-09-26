@@ -4,6 +4,9 @@ export interface DocMeta {
   date: string;
   wordCount: number;
   description?: string;
+  categories?: string[];
+  summary?: string;
+  slug?: string;
 }
 
 export interface DocumentState {

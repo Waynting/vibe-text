@@ -1,5 +1,6 @@
 import { DocumentState } from '@/types';
 import { parseTaggedContent, formatTaggedContent } from '@/hooks/useWordCount';
+import { parseMarkdownWithFrontmatter, formatMarkdownWithFrontmatter } from './markdownOperations';
 
 // Check if running in Tauri environment
 const isTauri = typeof window !== 'undefined' && (window as any).__TAURI__;
@@ -23,8 +24,16 @@ export async function openFile(): Promise<{ content: string; filePath: string; m
         title: '開啟文件',
         filters: [
           {
+            name: 'Markdown Files',
+            extensions: ['md']
+          },
+          {
             name: 'Text Files',
             extensions: ['txt']
+          },
+          {
+            name: 'All Files',
+            extensions: ['*']
           }
         ],
         multiple: false
@@ -35,7 +44,15 @@ export async function openFile(): Promise<{ content: string; filePath: string; m
       }
 
       const fileContent = await readTextFile(filePath);
-      const { meta, content } = parseTaggedContent(fileContent);
+      
+      let parsedResult;
+      if (filePath.endsWith('.md')) {
+        parsedResult = parseMarkdownWithFrontmatter(fileContent);
+      } else {
+        parsedResult = parseTaggedContent(fileContent);
+      }
+      
+      const { meta, content } = parsedResult;
 
       return {
         content,
@@ -47,7 +64,14 @@ export async function openFile(): Promise<{ content: string; filePath: string; m
       const result = await openTextFileInput();
       if (!result) return null;
       
-      const { meta, content } = parseTaggedContent(result.content);
+      let parsedResult;
+      if (result.filename.endsWith('.md')) {
+        parsedResult = parseMarkdownWithFrontmatter(result.content);
+      } else {
+        parsedResult = parseTaggedContent(result.content);
+      }
+      
+      const { meta, content } = parsedResult;
       return {
         content,
         filePath: `web:${result.filename}`, // 標記為瀏覽器檔案，不是真實路徑
@@ -63,13 +87,19 @@ export async function openFile(): Promise<{ content: string; filePath: string; m
 export async function saveFile(
   document: DocumentState, 
   useTaggedFormat: boolean = false,
-  customFileName?: string
+  customFileName?: string,
+  format: 'txt' | 'md' = 'md'
 ): Promise<string | null> {
   try {
     // Prepare content for saving
     let contentToSave = document.content;
     
-    if (useTaggedFormat) {
+    if (format === 'md') {
+      contentToSave = formatMarkdownWithFrontmatter(
+        document.meta,
+        document.content
+      );
+    } else if (useTaggedFormat) {
       contentToSave = formatTaggedContent(
         {
           id: document.meta.id,
@@ -92,11 +122,15 @@ export async function saveFile(
           title: '儲存文件',
           filters: [
             {
+              name: 'Markdown Files',
+              extensions: ['md']
+            },
+            {
               name: 'Text Files',
               extensions: ['txt']
             }
           ],
-          defaultPath: `${defaultName}.txt`
+          defaultPath: `${defaultName}.${format}`
         });
 
         if (!selectedPath) {
@@ -114,7 +148,7 @@ export async function saveFile(
     } else {
       // Fallback for web environment
       const defaultName = customFileName || document.fileName || document.meta.title || 'untitled';
-      const filename = document.filePath || `${defaultName}.txt`;
+      const filename = document.filePath || `${defaultName}.${format}`;
       downloadTextFile(contentToSave, filename);
       return filename;
     }
@@ -128,13 +162,19 @@ export async function saveFile(
 export async function saveAsFile(
   document: DocumentState,
   useTaggedFormat: boolean = false,
-  customFileName?: string
+  customFileName?: string,
+  format: 'txt' | 'md' = 'md'
 ): Promise<string | null> {
   try {
     // Prepare content for saving
     let contentToSave = document.content;
     
-    if (useTaggedFormat) {
+    if (format === 'md') {
+      contentToSave = formatMarkdownWithFrontmatter(
+        document.meta,
+        document.content
+      );
+    } else if (useTaggedFormat) {
       contentToSave = formatTaggedContent(
         {
           id: document.meta.id,
@@ -153,11 +193,15 @@ export async function saveAsFile(
         title: '另存文件',
         filters: [
           {
+            name: 'Markdown Files',
+            extensions: ['md']
+          },
+          {
             name: 'Text Files',
             extensions: ['txt']
           }
         ],
-        defaultPath: `${customFileName || document.fileName || document.meta.title || 'untitled'}.txt`
+        defaultPath: `${customFileName || document.fileName || document.meta.title || 'untitled'}.${format}`
       });
 
       if (!filePath) {
@@ -171,7 +215,7 @@ export async function saveAsFile(
       return filePath;
     } else {
       // Fallback for web environment
-      const filename = `${customFileName || document.fileName || document.meta.title || 'untitled'}.txt`;
+      const filename = `${customFileName || document.fileName || document.meta.title || 'untitled'}.${format}`;
       downloadTextFile(contentToSave, filename);
       return filename;
     }
@@ -199,7 +243,7 @@ export function openTextFileInput(): Promise<{ content: string; filename: string
   return new Promise((resolve) => {
     const input = document.createElement('input');
     input.type = 'file';
-    input.accept = '.txt';
+    input.accept = '.txt,.md';
     
     input.onchange = (event) => {
       const file = (event.target as HTMLInputElement).files?.[0];

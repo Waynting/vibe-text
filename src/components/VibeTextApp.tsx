@@ -29,9 +29,12 @@ function createNewDocument(): DocumentState {
     meta: {
       id: generateDocumentId(),
       title: '未命名',
-      date: getCurrentDate(),
+      date: new Date().toISOString(),
       wordCount: 0,
       description: '',
+      categories: [],
+      summary: '',
+      slug: '',
     },
     content: '',
     filePath: undefined,
@@ -171,15 +174,18 @@ export default function VibeTextApp() {
 
       // Extract filename from file path (handle both real paths and web: prefixed paths)
       const cleanPath = result.filePath.startsWith('web:') ? result.filePath.substring(4) : result.filePath
-      const fileName = cleanPath.split('/').pop()?.replace('.txt', '') || ''
+      const fileName = cleanPath.split('/').pop()?.replace(/\.(txt|md)$/, '') || ''
       
       setDocument({
         meta: {
           id: result.meta.id || generateDocumentId(),
           title: result.meta.title || fileName || '未命名',
-          date: result.meta.date || getCurrentDate(),
+          date: result.meta.date || new Date().toISOString(),
           wordCount: 0,
           description: result.meta.description || '',
+          categories: result.meta.categories || [],
+          summary: result.meta.summary || '',
+          slug: result.meta.slug || '',
         },
         content: result.content,
         filePath: result.filePath,
@@ -193,7 +199,7 @@ export default function VibeTextApp() {
 
   const handleSaveAs = useCallback(async () => {
     try {
-      const filePath = await saveAsFile(document, true, document.fileName)
+      const filePath = await saveAsFile(document, true, document.fileName, 'md')
       if (filePath) {
         setDocument(prev => ({
           ...prev,
@@ -213,7 +219,8 @@ export default function VibeTextApp() {
       
       if (hasRealFilePath) {
         // 有真實檔案路徑，直接覆蓋儲存
-        const filePath = await saveFile(document, true)
+        const format = document.filePath?.endsWith('.txt') ? 'txt' : 'md'
+        const filePath = await saveFile(document, true, undefined, format)
         if (filePath) {
           setDocument(prev => ({
             ...prev,
