@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Editor } from './Editor'
-import { Sidebar } from './Sidebar'
+import { TopBar } from './TopBar'
 import { DocumentState, DocMeta, ViewSettings } from '@/types'
 import { useWordCount } from '@/hooks/useWordCount'
 import { openFile, saveFile, saveAsFile } from '@/utils/fileOperations'
@@ -48,8 +48,9 @@ export default function VibeTextApp() {
   const [theme, setTheme] = useState<'light' | 'dark' | 'paper'>('light')
   const [viewSettings, setViewSettings] = useState<ViewSettings>({
     direction: 'rtl', // 預設為傳統中文從右到左
+    isPreviewMode: false, // 預設為編輯模式（但現在只有編輯模式）
   })
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  // 移除 metadata 展開狀態，因為現在使用 flexbox 自動處理佈局
   const wordCount = useWordCount(document.content)
 
   // Load theme from localStorage on mount
@@ -267,28 +268,8 @@ export default function VibeTextApp() {
 
   return (
     <div className="app-container">
-      {/* Main editor */}
-      <Editor
-        value={document.content}
-        onChange={handleContentChange}
-        title={document.meta.title}
-        viewSettings={viewSettings}
-      />
-      
-
-      {/* Mobile toolbar open button - show when collapsed */}
-      {!isMobileMenuOpen && (
-        <button
-          className="mobile-open-button md:hidden"
-          onClick={() => setIsMobileMenuOpen(true)}
-          aria-label="開啟選單"
-        >
-          ≡
-        </button>
-      )}
-      
-      {/* Minimal toolbar */}
-      <Sidebar
+      {/* 頂部工具欄 */}
+      <TopBar
         meta={document.meta}
         setMeta={handleMetaChange}
         wordCount={wordCount}
@@ -304,9 +285,17 @@ export default function VibeTextApp() {
         onSetPaperTheme={setPaperTheme}
         viewSettings={viewSettings}
         onViewSettingsChange={setViewSettings}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onCloseMobileMenu={() => setIsMobileMenuOpen(false)}
       />
+
+      {/* Main editor */}
+      <div className="editor-wrapper">
+        <Editor
+          value={document.content}
+          onChange={handleContentChange}
+          title={document.meta.title}
+          viewSettings={viewSettings}
+        />
+      </div>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { DocumentState } from '@/types';
+import { DocumentState, DocMeta } from '@/types';
 import { parseTaggedContent, formatTaggedContent } from '@/hooks/useWordCount';
 import { parseMarkdownWithFrontmatter, formatMarkdownWithFrontmatter } from './markdownOperations';
 
@@ -15,7 +15,7 @@ const getTauriApis = async () => {
   throw new Error('Tauri APIs not available');
 };
 
-export async function openFile(): Promise<{ content: string; filePath: string; meta: Partial<{ id: string; title: string; date: string; description: string }> } | null> {
+export async function openFile(): Promise<{ content: string; filePath: string; meta: Partial<DocMeta> } | null> {
   try {
     if (isTauri) {
       const { open, readTextFile } = await getTauriApis();

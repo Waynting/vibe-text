@@ -27,6 +27,7 @@ export type TextDirection = 'rtl' | 'ltr'; // Right-to-Left or Left-to-Right
 
 export interface ViewSettings {
   direction: TextDirection; // 文字方向
+  isPreviewMode: boolean; // 預覽模式
 }
 
 

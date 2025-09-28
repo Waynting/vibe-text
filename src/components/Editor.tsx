@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { ViewSettings } from '@/types'
+import { MarkdownPreview } from './MarkdownPreview'
 
 interface EditorProps {
   value: string
@@ -17,8 +18,14 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
   // Handle content changes
   const handleInput = () => {
     if (editorRef.current && !isComposing.current) {
-      const newContent = editorRef.current.innerText || ''
-      onChange(newContent)
+      // 使用 innerHTML 並處理 <br> 標籤轉換為換行符
+      const htmlContent = editorRef.current.innerHTML
+      const textContent = htmlContent
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<div><br><\/div>/gi, '\n')
+        .replace(/<div>(.*?)<\/div>/gi, '\n$1')
+        .replace(/<[^>]*>/g, '') // 移除所有其他 HTML 標籤
+      onChange(textContent)
     }
   }
 
@@ -92,19 +99,44 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
       }, 0)
     } else if (e.key === 'Enter') {
       // 確保 Enter 鍵可以正常換行
-      // 不需要 preventDefault()，讓瀏覽器處理預設行為
+      e.preventDefault()
+      
+      // 獲取當前選擇
+      const selection = window.getSelection()
+      if (!selection || selection.rangeCount === 0) return
+      
+      const range = selection.getRangeAt(0)
+      
+      // 簡單插入單個換行符
+      const br = document.createElement('br')
+      range.deleteContents()
+      range.insertNode(br)
+      
+      // 移動游標到換行符後面
+      range.setStartAfter(br)
+      range.setEndAfter(br)
+      range.collapse(true)
+      
+      selection.removeAllRanges()
+      selection.addRange(range)
+      
+      // 更新內容
       setTimeout(() => {
         handleInput()
       }, 0)
     }
   }
 
-  // Update editor content when value changes
+  // Update editor content when value changes or when switching back from preview mode
   useEffect(() => {
-    if (editorRef.current && editorRef.current.innerText !== value) {
-      editorRef.current.innerText = value
+    if (editorRef.current) {
+      // 將換行符轉換為 <br> 標籤以正確顯示
+      const htmlContent = value.replace(/\n/g, '<br>')
+      if (editorRef.current.innerHTML !== htmlContent) {
+        editorRef.current.innerHTML = htmlContent
+      }
     }
-  }, [value])
+  }, [value, viewSettings.isPreviewMode])
 
   // Focus editor on mount and set cursor position
   useEffect(() => {
@@ -120,30 +152,37 @@ export function Editor({ value, onChange, title, viewSettings }: EditorProps) {
     }
   }, [])
 
-  // 當檢視設定改變時，重新設置游標位置
+  // 當檢視設定改變時，重新設置游標位置和對焦
   useEffect(() => {
-    if (editorRef.current && document.activeElement === editorRef.current) {
-      const range = document.createRange()
-      const selection = window.getSelection()
-      range.setStart(editorRef.current, 0)
-      range.collapse(true)
-      selection?.removeAllRanges()
-      selection?.addRange(range)
+    if (editorRef.current && !viewSettings.isPreviewMode) {
+      // 如果不是在預覽模式，重新對焦編輯器
+      setTimeout(() => {
+        if (editorRef.current) {
+          editorRef.current.focus()
+          const range = document.createRange()
+          const selection = window.getSelection()
+          if (editorRef.current.childNodes.length > 0) {
+            range.setStartAfter(editorRef.current.lastChild!)
+          } else {
+            range.setStart(editorRef.current, 0)
+          }
+          range.collapse(true)
+          selection?.removeAllRanges()
+          selection?.addRange(range)
+        }
+      }, 0)
     }
-  }, [viewSettings.direction])
+  }, [viewSettings.direction, viewSettings.isPreviewMode])
+
+  // 如果是預覽模式，顯示 Markdown 預覽
+  if (viewSettings.isPreviewMode) {
+    return <MarkdownPreview content={value} title={title} viewSettings={viewSettings} />
+  }
 
   return (
     <div className="editor-area">
       {/* 編輯器容器 */}
       <div className={`editor-container direction-${viewSettings.direction}`}>
-        {/* Title area */}
-        <div className="title-area">
-          <div className="title-text">{title || '未命名'}</div>
-        </div>
-        
-        {/* Vertical divider line */}
-        <div className="title-divider"></div>
-        
         {/* Main content area */}
         <div
           id="editor-content"

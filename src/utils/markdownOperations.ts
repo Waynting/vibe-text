@@ -59,7 +59,10 @@ export function formatMarkdownWithFrontmatter(meta: DocMeta, content: string): s
   const yamlString = yaml.dump(yamlData, {
     lineWidth: -1,
     quotingType: '"',
-    forceQuotes: false
+    forceQuotes: false,
+    styles: {
+      '!!seq': 'flow' // 使用 flow style 讓陣列顯示為 ["感性", "鄉愁"] 格式
+    }
   });
 
   return `---\n${yamlString}---\n${content}`;
